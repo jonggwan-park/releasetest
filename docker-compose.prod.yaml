@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./steamate
+      volumes:
+      - static_volume:/app/static 
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - nginx 
+    command: >
+      sh -c "until nc -z db 5432; do
+      echo 'Waiting for DB...';
+      sleep 2;
+      done;
+      python manage.py migrate;
+      gunicorn steamate.wsgi:application --bind 0.0.0.0:8000"
+    networks:
+      - steamate-network
+
+
+
+  frontend:
+    build:
+      context: ./frontend # 프론트엔드 Dockerfile이 있는 폴더
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://web:8000
+    depends_on:
+      - web
+    volumes:
+      - static_volume:/usr/share/nginx/html/static
+    networks:
+      - steamate-network
+    
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+      - frontend
+    networks:
+      - steamate-network
+networks:
+  steamate-network:
+    driver: bridge
+
+volumes:
+  static_volume:

@@ -13,3 +13,18 @@ COPY . .
 
 # 개발 서버 실행 (파일 변경 시 자동 반영됨)
 CMD ["npm", "start"]
+
+
+
+# Nginx 설정
+
+FROM nginx:latest
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build /app/build /usr/share/nginx/html
+
+
+
+CMD ["nginx", "-g", "daemon off;"]
+
