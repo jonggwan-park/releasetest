@@ -24,8 +24,7 @@ services:
 
   frontend:
     build:
-      context: . # 프론트엔드 Dockerfile이 있는 폴더
-      dockerfile: frontend/Dockerfile
+      context: ./frontend # 프론트엔드 Dockerfile이 있는 폴더
     ports:
       - "3000:80"
     environment:
@@ -42,6 +41,7 @@ services:
       - "80:80"
     depends_on:
       - web
+      - frontend
     networks:
       - steamate-network
 networks:

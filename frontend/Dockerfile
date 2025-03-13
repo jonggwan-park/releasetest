@@ -5,12 +5,12 @@ FROM node:18 AS build
 WORKDIR /app
 
 # package.json 및 package-lock.json 복사 후 의존성 설치
-COPY frontend/ ./
-RUN npm install
-RUN npm install react-scripts --save
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install --force
+
 
 # 프로젝트 코드 복사
-COPY . .
+COPY frontend/. .
 RUN npm run build
 # 개발 서버 실행 (파일 변경 시 자동 반영됨)
 
