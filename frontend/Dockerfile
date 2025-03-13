@@ -10,9 +10,9 @@ RUN npm install
 
 # 프로젝트 코드 복사
 COPY . .
-
+RUN npm run build
 # 개발 서버 실행 (파일 변경 시 자동 반영됨)
-CMD ["npm", "start"]
+
 
 
 
