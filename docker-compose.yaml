@@ -58,3 +58,4 @@ networks:
 
 volumes:
   static_volume:
+  frontend_build:
